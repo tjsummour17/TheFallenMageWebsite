@@ -1,0 +1,3 @@
+<?php
+$myAuth = "SaraMySweetheart";
+?>
