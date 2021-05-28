@@ -41,7 +41,8 @@ class AddDriver
                 }
             }
         } else {
-            header("HTTP/1.1 400 Bad Request");
+            print("Error in Sever");
+            header("HTTP/1.1 500 Internal Server Error");
             exit;
         }
     }
@@ -67,6 +68,7 @@ if (isset($data['name'], $data['phone'], $data['carType'], $data['carModel'], $d
     if (!empty($name) && !empty($phone) && !empty($city) && !empty($password)) {
         $driver->driver_exist($name, $phone, $imageUrl, $carType, $carModel, $city, $password, $token);
     } else {
+        print("Error in Request");
         header("HTTP/1.1 400 Bad Request");
         exit;
     }
