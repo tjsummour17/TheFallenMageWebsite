@@ -30,6 +30,7 @@ class AddDriver
                 $password = password_hash($password, PASSWORD_DEFAULT);
                 $query = "INSERT INTO `drivers`(`id`, `name`, `phone`, `imageUrl`, `password`, `carType`, `carModel`, `city`,`login_token`, `token`) values( NULL, '$name', '$phone', '$imageUrl', '$password', '$carType', $carModel, '$city', '$loginToken', '$token')";
                 $is_inserted = mysqli_query($this->connection, $query);
+                print($query);
                 if ($is_inserted == 1) {
                     header("HTTP/1.1 200 OK");
                     header('login_token:' . $loginToken);
@@ -41,7 +42,6 @@ class AddDriver
                 }
             }
         } else {
-            print("Error in Sever");
             header("HTTP/1.1 500 Internal Server Error");
             exit;
         }
@@ -65,7 +65,7 @@ if (isset($data['name'], $data['phone'], $data['carType'], $data['carModel'], $d
     $city = $data['city'];
     $password = $data['password'];
     $token = $data['token'];
-    if (!empty($name) && !empty($phone) && !empty($city) && !empty($password)) {
+    if (!empty($name) && !empty($phone) && !empty($password)) {
         $driver->driver_exist($name, $phone, $imageUrl, $carType, $carModel, $city, $password, $token);
     } else {
         print("Error in Request");

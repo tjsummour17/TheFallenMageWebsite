@@ -55,7 +55,7 @@ class UpdateItem
                 }
             } else {
                 $json['status'] = 401;
-                $json['message'] = 'Something wrong';
+                $json['message'] = $query;
             }
         }
         echo json_encode($json);
