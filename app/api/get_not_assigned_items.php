@@ -2,7 +2,7 @@
 include('con.php');
 header('Content-Type: application/json');
 
-class GetCompanies
+class GetItems
 {
     private $db;
     private $connection;
@@ -13,27 +13,33 @@ class GetCompanies
         $this->connection = $this->db->get_connection();
     }
 
-    public function get_companies($auth, $orderBy = 'name')
+    public function get_items($auth)
     {
         $query = "SELECT * FROM `admins` WHERE `login_token` = '$auth'";
         $result = mysqli_query($this->connection, $query);
         if (mysqli_num_rows($result) != 1) {
-            header("HTTP/1.1 401 Unauthorized");
-            exit;
+            $json['status'] = 400;
+            $json['message'] = ' Sorry you dont have any access to do this.';
+            echo json_encode($json);
+            mysqli_close($this->connection);
         } else {
-            $query = "SELECT `id`, `name`, `admin`, `phone`, `image`, `location`, `city`, `wallet`, `canceledRequests`, `token`, `login_token`, `t_update`, `t_create`, `is_archived` FROM `companies`";
+            $query = "SELECT * FROM `items` WHERE `driverId` IS NULL";
             $result = mysqli_query($this->connection, $query);
             if (mysqli_num_rows($result) > 0) {
-                echo json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC));
+                $json['status'] = 200;
+                $json['message'] = 'Success';
+                $json['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
             } else {
-                header("HTTP/1.1 503 Service Unavailable");
+                $json['status'] = 401;
+                $json['message'] = 'Something wrong';
             }
+            echo json_encode($json);
             mysqli_close($this->connection);
         }
     }
 }
 
-$getItems = new GetCompanies();
+$getItems = new GetItems();
 $headerValue = "";
 foreach (getallheaders() as $name => $value) {
     if ($name == "auth") {
@@ -41,8 +47,5 @@ foreach (getallheaders() as $name => $value) {
     }
 }
 if (!empty($headerValue)) {
-    if (isset($_GET['orderBy']))
-        $getItems->get_companies($headerValue, $_GET['orderBy']);
-    else
-        $getItems->get_companies($headerValue);
+    $getItems->get_items($headerValue);
 }

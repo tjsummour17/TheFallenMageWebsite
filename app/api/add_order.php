@@ -26,7 +26,6 @@ class AddItem
                 $images = "[]";
             $query = "INSERT INTO `items`(`id`, `name`, `description`, `price`, `quantity`, `receiveLocation`, `deliveryLocation`, `customerName`, `customerPhone`, `companyId`,`images`) VALUES ( NULL, '$name', '$description', $price, $quantity, '$receiveLocation', '$deliveryLocation', '$customerName', '$customerPhone', $companyId,'$images')";
             $is_inserted = mysqli_query($this->connection, $query);
-            echo $query;
             if ($is_inserted == 1) {
                 header("HTTP/1.1 200 OK");
             } else {

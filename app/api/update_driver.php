@@ -26,7 +26,7 @@ class UpdateDriver
             $json['status'] = 400;
             $json['message'] = ' Sorry your account is not exist.';
         } else {
-            $query = "UPDATE `drivers` SET `name` = '$name', `email` = '$email', `imageUrl` = '$imageUrl', `carType` = '$carType', `carModel` = $carModel, `city` = '$city' WHERE `id` = $id";
+            $query = "UPDATE `drivers` SET `name` = '$name', `imageUrl` = '$imageUrl', `carType` = '$carType', `carModel` = $carModel, `city` = '$city' WHERE `id` = $id";
             $is_inserted = mysqli_query($this->connection, $query);
             if ($is_inserted == 1) {
                 $json['status'] = 200;
