@@ -57,6 +57,4 @@ if (!empty($auth)) {
     $driver->get_driver($auth);
 } else {
     header("HTTP/1.1 401 Unauthorized");
-    print("Errrrrror");
-
 }

@@ -47,8 +47,6 @@ if (isset($_GET['companyId'])) {
     if (!empty($companyId) && !empty($headerValue)) {
         $getItems->get_compay_items($companyId, $headerValue);
     } else {
-        $json['status'] = 100;
-        $json['message'] = 'You must fill all the fields';
-        echo json_encode($json);
+        header("HTTP/1.1 400 Bad Request");
     }
 }

@@ -51,7 +51,7 @@ class Driver
             if ($result != 1) {
                 header("HTTP/1.1 304 Not Modified");
             } else {
-                $query = "SELECT * FROM `items` WHERE id = $itemId AND `status` = 0 ";
+                $query = "SELECT * FROM `items` WHERE id = $itemId";
                 $isValid = mysqli_query($this->connection, $query);
                 if (mysqli_num_rows($isValid) == 1) {
                     $query = "UPDATE `items` SET shipmentCharges = $shipmentCharges, driverId = $driverId, driverRatio = $driverRatio WHERE `id` = $itemId";
