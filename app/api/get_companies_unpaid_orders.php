@@ -16,8 +16,10 @@ class GetCompanies
     public function get_companies($auth, $companyId)
     {
         $query = "SELECT * FROM `admins` WHERE `login_token` = '$auth'";
-        $result = mysqli_query($this->connection, $query);
-        if (mysqli_num_rows($result) != 1) {
+        $result1 = mysqli_query($this->connection, $query);
+        $query = "SELECT * FROM `companies` WHERE `login_token` = '$auth'";
+        $result2 = mysqli_query($this->connection, $query);
+        if (mysqli_num_rows($result1) != 1 && mysqli_num_rows($result2) != 1) {
             header("HTTP/1.1 401 Unauthorized");
             exit;
         } else {

@@ -63,7 +63,7 @@ class UpdateItem
                             $is_inserted = mysqli_query($this->connection, $query);
                             if ($is_inserted == 1) echo "company no. " . $item['companyId'] . " wallet has been updated";
                         } else
-                            if ($status >= 3 && $status != 5) {
+                            if ($status >= 3 && $status != 4) {
                                 $query = "INSERT INTO `driverUnpaidRequests`(`id`, `name`, `price`, `quantity`, `status`, `images`, `receiveLocation`, `deliveryLocation`, `customerName`, `customerPhone`, `companyId`, `shipmentCharges`, `driverId`, `moneyWithDriver`, `driverRatio`, `driverNotes`) VALUES (NULL, '" . $item['name'] . "', " . $item['price'] . ", " . $item['quantity'] . ", " . $item['status'] . ", '" . $item['images'] . "', '" . $item['receiveLocation'] . "', '" . $item['deliveryLocation'] . "', '" . $item['customerName'] . "', '" . $item['customerPhone'] . "', " . $item['companyId'] . ", " . $item['shipmentCharges'] . ", " . $item['driverId'] . ", " . $item['moneyWithDriver'] . ", " . $item['driverRatio'] . ", '" . $item['driverNotes'] . "')";
                                 $is_inserted1 = mysqli_query($this->connection, $query);
                                 if ($is_inserted1 == 1) echo "Order has been added to Driver Unpaid Requests ";
@@ -77,13 +77,13 @@ class UpdateItem
                                 $query = "DELETE FROM `items` WHERE `id` = $itemId";
                                 $is_inserted4 = mysqli_query($this->connection, $query);
                                 if ($is_inserted4 == 1) echo "Order has been removed from items ";
-                                if ($status == 7) {
+                                if ($status == 6) {
                                     $canceledRequests = $company['canceledRequests'] + ($item['shipmentCharges'] * $item['driverRatio']) + ($item['price'] * $item['quantity']);
                                     $query = "UPDATE `companies` SET `canceledRequests`=" . $canceledRequests . " WHERE `id`= " . $item['companyId'];
                                     $is_inserted = mysqli_query($this->connection, $query);
                                     if ($is_inserted == 1) echo "company no. " . $item['companyId'] . " canceledRequests has been updated ";
                                 } else
-                                    if ($status == 6) {
+                                    if ($status == 5) {
                                         $canceledRequests = $company['canceledRequests'] + ($item['price'] * $item['quantity']);
                                         $query = "UPDATE `companies` SET `canceledRequests`=" . $canceledRequests . " WHERE `id`= " . $item['companyId'];
                                         $is_inserted = mysqli_query($this->connection, $query);

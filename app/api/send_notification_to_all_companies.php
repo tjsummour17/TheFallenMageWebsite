@@ -45,9 +45,6 @@ class SendNotifications
         $result = mysqli_query($this->connection, $query);
         if (mysqli_num_rows($result) != 1) {
             header("HTTP/1.1 401 Unauthorized");
-            $json['status'] = 400;
-            $json['message'] = ' Sorry you dont have any access to do this.';
-            echo json_encode($json);
             mysqli_close($this->connection);
         } else {
             $query = "SELECT `token` FROM `companies`";
@@ -77,9 +74,6 @@ if (isset($data['title'], $data['body']) && !empty($headerValue)) {
         $sendNotifications->send($headerValue, $title, $body);
     } else {
         header("HTTP/1.1 404 bad request");
-        $json['status'] = 100;
-        $json['message'] = 'You must fill all the fields';
-        echo json_encode($json);
     }
 } else
     header("HTTP/1.1 400 bad state");

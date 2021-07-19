@@ -18,22 +18,16 @@ class GetItems
         $query = "SELECT * FROM `admins` WHERE `login_token` = '$auth'";
         $result = mysqli_query($this->connection, $query);
         if (mysqli_num_rows($result) != 1) {
-            $json['status'] = 400;
-            $json['message'] = ' Sorry you dont have any access to do this.';
-            echo json_encode($json);
+            header("HTTP/1.1 401 Unauthorized");
             mysqli_close($this->connection);
         } else {
             $query = "SELECT * FROM `items` WHERE `driverId` IS NULL";
             $result = mysqli_query($this->connection, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $json['status'] = 200;
-                $json['message'] = 'Success';
-                $json['data'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            if (mysqli_num_rows($result) >= 0) {
+                echo json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC));
             } else {
-                $json['status'] = 401;
-                $json['message'] = 'Something wrong';
+                header("HTTP/1.1 503 Service Unavailable");
             }
-            echo json_encode($json);
             mysqli_close($this->connection);
         }
     }
@@ -48,4 +42,7 @@ foreach (getallheaders() as $name => $value) {
 }
 if (!empty($headerValue)) {
     $getItems->get_items($headerValue);
+} else {
+    header("HTTP/1.1 401 Unauthorized");
+
 }
