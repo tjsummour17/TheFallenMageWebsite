@@ -14,7 +14,7 @@ class UpdateCompany
         $this->connection = $this->db->get_connection();
     }
 
-    public function update_company($auth, $companyId, $orderIds, $paymentValue, $selectAll)
+    public function update_company($auth, $companyId, $orderIds, $selectAll)
     {
         $query = "SELECT * FROM `admins` WHERE `login_token` = '$auth'";
         $result = mysqli_query($this->connection, $query);
@@ -24,25 +24,12 @@ class UpdateCompany
         } else {
             if ($selectAll == 1) {
                 $query = "DELETE FROM `companyUnpaidOrders` WHERE `companyId` = $companyId";
-                $is_inserted = mysqli_query($this->connection, $query);
-                if ($is_inserted == 1) {
-                    $query = "UPDATE `companies` SET `wallet` = 0.0, `canceledRequests` = 0.0 WHERE `id` = $companyId";
-                    $is_inserted = mysqli_query($this->connection, $query);
-                    if ($is_inserted != 1) {
-                        header("HTTP/1.1 500 Internal Server Error");
-                    }
-                }
+                mysqli_query($this->connection, $query);
             } else {
                 $query = "SELECT * FROM `companies` WHERE id = $companyId";
                 $result = mysqli_query($this->connection, $query);
-                $company = mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
-                if ($company['wallet'] >= $paymentValue) {
-                    $newWallet = $company['wallet'] - $paymentValue;
-                    $query = "UPDATE `companies` SET `wallet` = " . $newWallet . ", `canceledRequests` = 0.0 WHERE `id` = $companyId";
-                    $is_inserted = mysqli_query($this->connection, $query);
-                    if ($is_inserted != 1) {
-                        header("HTTP/1.1 500 Internal Server Error");
-                    }
+                if ($result == 1) {
+                    print_r($orderIds);
                     foreach ($orderIds as $orderId) {
                         $query = "DELETE FROM `companyUnpaidOrders` WHERE `companyId` = $companyId AND `id` = $orderId";
                         mysqli_query($this->connection, $query);
@@ -67,8 +54,7 @@ if (!empty($auth)) {
         $companyId = $data['companyId'];
         $orderIds = $data['orderIds'];
         $selectAll = $data['selectAll'];
-        $paymentValue = $data['paymentValue'];
-        $newCompany->update_company($auth, $companyId, $orderIds, $paymentValue, $selectAll);
+        $newCompany->update_company($auth, $companyId, $orderIds, $selectAll);
     } else {
         header("HTTP/1.1 403 Bad Request");
     }
